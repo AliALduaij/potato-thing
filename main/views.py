@@ -83,3 +83,10 @@ def contribute_to_article(request, article_id):
 
     context = {"form": form, "article": article}
     return render(request, 'contribute_to_article.html', context)
+
+
+def my_contributions_list(request):
+    if request.user.is_anonymous:
+        return redirect('login')
+
+    return render(request, "my_contributions_list.html")
