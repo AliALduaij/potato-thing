@@ -5,4 +5,6 @@
 
 {% if request.user == article.author %}
 <a href="{% url 'edit-article' article.id %}">Edit</a>
-{% endif %} {% endblock content%}
+{% elif request.user.is_authenticated %}
+<a href="{% url 'contribute-to-article' article.id %}">Contribute</a>
+{% endif %} {% endblock content %}
