@@ -32,6 +32,8 @@ urlpatterns = [
     path('create/', views.create_article, name="create-article"),
     path('edit/<int:article_id>', views.edit_article, name="edit-article"),
     path('my-articles/', views.my_articles_list, name="my-articles-list"),
-    # ------------ changed auth_view.register to views.register because is was error
-    path('register/', views.register, name="register"),
+
+    path('register/', auth_views.register, name="register"),
+    path('login/', auth_views.login_view, name="login"),
+    path('logout/', auth_views.logout_view, name="logout"),
 ]
