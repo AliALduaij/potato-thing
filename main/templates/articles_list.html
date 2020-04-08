@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head> </head>
-  <body>
+{% extends "base.html" %}
+{% block content %}
     <ul>
       {% for article in articles %}
       <li>
@@ -11,5 +9,4 @@
       </li>
       {% endfor %}
     </ul>
-  </body>
-</html>
+    {% endblock content%}
