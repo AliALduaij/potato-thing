@@ -18,6 +18,9 @@ from django.urls import path
 from main import views
 from authentication import views as auth_views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,9 +39,19 @@ urlpatterns = [
          name="contribute-to-article"),
     path('my-contributions/', views.my_contributions_list,
          name="my-contributions-list"),
+    path('contributions/', views.contributions_list, name="contributions-list"),
+    path('contributions/<int:contribution_id>/',
+         views.contribution_details, name="contribution-details"),
+    path('accept/<int:contribution_id>/',
+         views.accept_changes, name="accept-changes"),
+    path('decline/<int:contribution_id>/',
+         views.decline_changes, name="decline-changes"),
+
 
     path('register/', auth_views.register, name="register"),
     path('login/', auth_views.login_view, name="login"),
     path('logout/', auth_views.logout_view, name="logout"),
 
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
