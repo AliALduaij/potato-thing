@@ -2,5 +2,7 @@
 <h1>{{article.title}}</h1>
 <h6>{{article.author}}</h6>
 <p>{{article.content}}</p>
+
+{% if request.user == article.author %}
 <a href="{% url 'edit-article' article.id %}">Edit</a>
-{% endblock content%}
+{% endif %} {% endblock content%}

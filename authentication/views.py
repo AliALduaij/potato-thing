@@ -21,6 +21,8 @@ def register(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('articles-list')
     form = UserLogin()
     if request.method == 'POST':
         form = UserLogin(request.POST)
