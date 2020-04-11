@@ -1,9 +1,12 @@
 {% extends "base.html" %} {% block content %} {% for line in comparison %} {% if
 not line|make_list|first == '?' %} {% if line|make_list|first == '-' %}
-<p class="red-background"></p>
-{% elif line|make_list|first == '+' %}
-<p class="green-background"></p>
-{% endif %} {{line}}
-<a href="{% url 'accept-changes' contribution.id %}">Accept</a>
-<a href="{% url 'decline-changes' contribution.id %}">Decline</a>
-{% endfor %} {% endblock content%}
+<p class="red-background">
+  {% elif line|make_list|first == '+' %}
+</p>
+
+<p class="green-background">
+  {% endif %} {{line}}
+</p>
+{% endif %} {% endfor %} {% endblock content%}
+
+<!-- Wierd error asking to close end if  -->

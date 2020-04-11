@@ -1,7 +1,8 @@
-{% extends "base.html" %} {% block content %} {% for article in
-user.articles.all %}
-<a href="{% url 'article-details' article.id %}">
-  <h1>{{ article.title }}</h1>
+{% extends "base.html" %} {% block content %} {% for x in user.articles.all %}
+<a href="{% url 'article-details' x.slug %}">
+  <h1>{{ x.title }}</h1>
 </a>
 <hr />
 {% endfor %} {% endblock content%}
+
+<!-- there was an wierd error here saying that i didn't close {% endfor %} -->

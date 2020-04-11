@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     'main',
     'authentication',
-
+    # ask the user to install crispy forms in installed apps to work >>
     'crispy_forms',
 ]
 

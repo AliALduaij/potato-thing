@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 import difflib
 from django.conf import settings
+from django.template.defaultfilters import slugify
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Article
 from .forms import ArticleForm, ContributeArticleForm
@@ -10,14 +12,31 @@ from .forms import ArticleForm, ContributeArticleForm
 
 def articles_list(request):
     articles = Article.objects.all()
+
+    query = request.GET.get("q")
+    if query:
+        articles = articles.filter(title__contains=query)
+
+    paginator = Paginator(articles, 10)
+    page_number = request.GET.get('page')
+
+    try:
+        objects = paginator.page(page_number)
+    except PageNotAnInteger:
+
+        objects = paginator.page(1)
+    except EmptyPage:
+
+        objects = paginator.page(paginator.num_pages)
+
     context = {
-        "articles": articles,
+        "articles": objects,
     }
     return render(request, "articles_list.html", context)
 
 
-def article_details(request, article_id):
-    context = {"article": Article.objects.get(id=article_id)}
+def article_details(request, article_slug):
+    context = {"article": Article.objects.get(slug=article_slug)}
     return render(request, 'article_details.html', context)
 
 
@@ -31,7 +50,7 @@ def create_article(request):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-            return redirect('article-details', article.id)
+            return redirect('article-details', article.slug)
 
     context = {"form": form}
 
@@ -50,7 +69,8 @@ def edit_article(request, article_id):
 
         if form.is_valid():
             form.save()
-            return redirect('article-details', article_id)
+            # article.id have to be changed to article.slug >>
+            return redirect('article-details', article.slug)
 
     context = {"form": form, "article": article}
     return render(request, 'edit_article.html', context)
@@ -58,8 +78,6 @@ def edit_article(request, article_id):
 
 def my_articles_list(request):
     return render(request, "my_articles_list.html")
-
-    from .forms import ArticleForm, ContributeArticleForm
 
 
 def contribute_to_article(request, article_id):
@@ -151,18 +169,3 @@ def decline_changes(request, contribution_id):
     contribution.change.delete()
 
     return redirect('contributions-list')
-
-    def article_details(request, article_id):
-        article = Article.objects.get(id=article_id)
-        if settings.DEBUG:
-            contributions = article.contributions.filter(
-                status=Contribution.ACCEPTED)
-        else:
-            contributions = article.contributions.filter(
-                status=Contribution.ACCEPTED).distinct('user')
-
-        context = {
-            "article": article,
-            "contributions": contributions,
-        }
-        return render(request, "article_details.html", context)
